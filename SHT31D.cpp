@@ -12,7 +12,7 @@ int SHT31D::begin(int i2c_address, uint8_t sht31_address){
   return fp;
  }
 
- if (ioctl(fp, I2C_SLAVE, sht31_address) < 0) {
+ if (ioctl(fp, I2C_SLAVE, I2CADDR ) < 0) {
   close(fp);
   return -1;
   }
