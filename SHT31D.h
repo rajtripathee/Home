@@ -15,6 +15,8 @@ class SHT31D {
 public:
 float readTemperature();
 float readHumidity();
+int begin(int i2c_address, uint8_t sht31_address);
+int close(int file);
 uint8_t crc8(const uint8_t *data, int len);
 
 private:
