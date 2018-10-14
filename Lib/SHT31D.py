@@ -1,9 +1,11 @@
 import smbus
 import time
 from time import sleep
-import platform
 
-I2CADDR =0X44
+# Default address
+I2CADDR = 0X44
+
+# Registers
 MEAS_HIGHREP_STRETCH = 0x2C06
 MEAS_MEDREP_STRETCH = 0x2C0D
 MEAS_LOWREP_STRETCH = 0x2C10
@@ -19,18 +21,20 @@ HEATER_OFF = 0x3066
 
 
 class SHT31D:
-    def __init__(self, address = I2CADDR, i2c_bus):
-        self.i2c_device = get_i2c_device(address,i2c_bus)
+    def __init__(self, address = I2CADDR, i2c=None, **kwargs):
+        if i2c is None:
+            import I2C
+            i2c = I2C
+        self._device = i2c.i2c_device(address, **kwargs)
+        sleep(0.05)
         #self.command(SOFTRESET);
-
-
 
     def write(self,cmd):
         self._device.write8bit(cmd >> 8, cmd & 0xFF)
     
     def read(self):
         self.write(READSTATUS)
-        temp = self._device.readblock(0,3)
+        temp = self._device.readBlock(0,3)
         stat = temp[0] << 8 | temp[1]
         if temp[2] != self._crc8(temp[0:2]):
             return None
@@ -46,7 +50,7 @@ class SHT31D:
     def temperature_humidity(self):
         self.write(MEAS_HIGHREP)
         sleep(0.02)
-        temp = self._device.readblock(0,6)
+        temp = self._device.readBlock(0, 6)
         
         if temp[2] != self._crc8(temp[0:2]):
             return(float("NAN"),float("NAN"))

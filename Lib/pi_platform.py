@@ -4,6 +4,9 @@
 
 import re
 
+UNKNOWN     = 0
+PI          = 1
+
 def version():
     with open("/proc/cpuinfo", "r") as infile:
         cpuinfo = infile.read()
@@ -39,7 +42,7 @@ def revision():
 
 
 def detect_platform():
-    pi = pi_version()
+    pi = version()
     if pi is not None:
         return PI
     

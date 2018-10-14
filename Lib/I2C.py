@@ -38,7 +38,7 @@ class Device(object):
     def write8bit(self,register,data):
         # Write 8-bit data to the specified register.
         data = data & 0xFF
-        self._bus.write_byte(self._address, register, data)
+        self._bus.write_byte_data(self._address, register, data)
 
     def write16bit(self,register,data):
         # Write 16-bit data to the specified register.
@@ -69,7 +69,7 @@ class Device(object):
     def readU16bit(self, register, little_endian = True):
         # Read Un
         data = self._bus.read_word_data(self._address, register) & 0xFFFF
-        if not little_endina:
+        if not little_endian:
             data = ((data <<8) & 0xFF00) + (data >> 8)
         return data
 
