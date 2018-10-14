@@ -1,4 +1,5 @@
 #define I2CADDR                 0X44
+#define READ_SERIALNUM          0x3780
 #define MEAS_HIGHREP_STRETCH    0x2C06
 #define MEAS_MEDREP_STRETCH     0x2C0D
 #define MEAS_LOWREP_STRETCH     0x2C10
@@ -13,15 +14,17 @@
 
 class SHT31D {
 public:
-float readTemperature();
-float readHumidity();
-int begin(int i2c_address, uint8_t sht31_address);
-int close(int file);
-uint8_t crc8(const uint8_t *data, int len);
+    float readTemperature();
+    float readHumidity();
+    int begin(int i2c_address, uint8_t sht31_address);
+    int close(int file);
+    uint8_t crc8(const uint8_t *data, int len);
+
+    unsigned int getSerialNum(int fp, uunt32_t * serialNo);
 
 private:
-float temp, humid;
+    float temp, humid;
 
- boolean readTempHum(void);
- void writeCommand(uint16_t cmd);
+    boolean readTempHum(void);
+    unsigned int writeCommand(int fp,uint16_t cmd, uint8_t *buffer, int readSize);
 }
