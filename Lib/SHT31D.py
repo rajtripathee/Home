@@ -26,6 +26,7 @@ class SHT31D:
             import I2C
             i2c = I2C
         self._device = i2c.i2c_device(address, **kwargs)
+        self.write(SOFTRESET)
         sleep(0.05)
         #self.command(SOFTRESET);
 
@@ -73,6 +74,13 @@ class SHT31D:
     def humidity(self):
         (temperature, humidity) = self.temperature_humidity()
         return humidity
+    
+    def heater(self, value = False):
+        if value:
+            self.write(HEATER_ON)
+        else:
+            self.write(HEATER_OFF)
+
 
     def _crc8(self, buffer):
         """ Polynomial 0x31 (x8 + x5 +x4 +1) """
